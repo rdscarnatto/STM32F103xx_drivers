@@ -207,13 +207,16 @@ typedef struct
 #define GPIOC_PCLK_DI()   ( RCC->APB2ENR &= ~(1 << 4) )
 #define AFIO_PCLK_DI()    ( RCC->APB2ENR &= ~(1 << 0) )
 
+/*
+* Macros to reset GPIOx peripherals
+*
+*/
+#define GPIOA_REG_RESET()		do{(RCC->APB2RSTR |= (1 << 2)); (RCC->APB2RSTR &= ~(1 << 2));}while(0)
+#define GPIOB_REG_RESET()		do{(RCC->APB2RSTR |= (1 << 3)); (RCC->APB2RSTR &= ~(1 << 3));}while(0)
+#define GPIOC_REG_RESET()		do{(RCC->APB2RSTR |= (1 << 4)); (RCC->APB2RSTR &= ~(1 << 4));}while(0)
 
 
-
-
-
-
-
+#include "stm32f103xx_gpio_driver.h"
 
 
 #endif /* INC_STM32F103XX_H_ */

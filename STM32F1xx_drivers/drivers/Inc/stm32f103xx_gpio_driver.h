@@ -2,7 +2,7 @@
  * stm32f103xx_gpio_driver.h
  *
  *  Created on: 18 ene. 2023
- *      Author: ARRSC
+ *      Author: Daniel
  */
 
 #ifndef INC_STM32F103XX_GPIO_DRIVER_H_
@@ -80,6 +80,8 @@ typedef struct
 #define RESET		DISABLE
 #define GPIO_PIN_SET	SET
 #define GPIO_PIN_RESET	RESET
+
+
 
 /******************************************************************************************
  *								APIs supported by this driver
