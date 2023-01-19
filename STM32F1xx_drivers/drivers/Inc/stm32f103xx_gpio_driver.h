@@ -2,7 +2,7 @@
  * stm32f103xx_gpio_driver.h
  *
  *  Created on: 18 ene. 2023
- *      Author: Daniel
+ *      Author: ARRSC
  */
 
 #ifndef INC_STM32F103XX_GPIO_DRIVER_H_
@@ -17,12 +17,8 @@ typedef struct
 {
 	uint8_t GPIO_PinNumber;
 	uint8_t GPIO_PinMode;			/*!< possible values from @GPIO_PIN_MODES >*/
-	uint8_t GPIO_PinSpeed;			/*!< possible values from @GPIO_PIN_SPEED >*/
-	uint8_t GPIO_PinPuPdControl;
-	uint8_t GPIO_PinOPType;
-	uint8_t GPIO_PinAltFunMode;
+	uint8_t GPIO_PinCfg;			/*!< possible values from @GPIO_PIN_CONFIG >*/
 }GPIO_PinConfig_t;
-
 
 /*
  * This is a Handle structure for a GPIO pin
@@ -60,35 +56,23 @@ typedef struct
  * @GPIO_PIN_MODES
  * GPIO pin possible modes
  */
-#define GPIO_MODE_IN 		0
-#define GPIO_MODE_OUT 		1
-#define GPIO_MODE_ALTFN 	2
-#define GPIO_MODE_ANALOG 	3
-#define GPIO_MODE_IT_FT     4
-#define GPIO_MODE_IT_RT     5
-#define GPIO_MODE_IT_RFT    6
-
+#define GPIO_MODE_IN 			0
+#define GPIO_MODE_OUT_10MHZ 	1
+#define GPIO_MODE_OUT_2MHZ		2
+#define GPIO_MODE_OUT_50MHZ		3
 /*
- * GPIO pin possible output types
+ * @GPIO_PIN_CONFIG
+ * GPIO pin possible modes
  */
-#define GPIO_OP_TYPE_PP   0
-#define GPIO_OP_TYPE_OD   1
+#define GPIO_CNF_IN_ANALOG 	0		/*Input mode Analog */
+#define GPIO_CNF_IN_F	 	1		/*Input mode Floating */
+#define GPIO_CNF_IN_PUPD 	2		/*Input mode with pull-up pull-down */
 
-/*
- * @GPIO_PIN_SPEED
- * GPIO pin possible output speeds
- */
-#define GPIO_SPEED_LOW			0
-#define GPIO_SPEED_MEDIUM		1
-#define GPIO_SPEED_FAST			2
-#define GPOI_SPEED_HIGH			3
+#define GPIO_CNF_OUT_PP 	0		/*Output Push-pull  */
+#define GPIO_CNF_OUT_OD 	1		/*Output Open drain */
+#define GPIO_CNF_AF_PP	 	2		/*Alternated Function output push-pull */
+#define GPIO_CNF_AF_OD		3		/*Alternated Function output Open Drain */
 
-/*
- * GPIO pin pull up AND pull down configuration macros
- */
-#define GPIO_NO_PUPD   		0
-#define GPIO_PIN_PU			1
-#define GPIO_PIN_PD			2
 
 #define ENABLE		1
 #define DISABLE		2
@@ -96,8 +80,6 @@ typedef struct
 #define RESET		DISABLE
 #define GPIO_PIN_SET	SET
 #define GPIO_PIN_RESET	RESET
-
-
 
 /******************************************************************************************
  *								APIs supported by this driver
