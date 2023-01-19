@@ -2,10 +2,11 @@
  * stm32f103xx_gpio_driver.c
  *
  *  Created on: 18 ene. 2023
- *      Author: ARRSC
+ *      Author: Daniel
  */
 
 #include "stm32f103xx_gpio_driver.h"
+
 
 /*********************************************************************
  * @fn      		  - GPIO_PeriClockControl
@@ -19,7 +20,6 @@
  * @return            -  none
  *
  * @Note              -  none
-
  */
 void GPIO_PeriClockControl(GPIO_RegDef_t *pGPIOx, uint8_t EnorDi)
 {
@@ -43,7 +43,7 @@ void GPIO_PeriClockControl(GPIO_RegDef_t *pGPIOx, uint8_t EnorDi)
 		}else if(pGPIOx == GPIOC)
 		{
 			GPIOC_PCLK_DI();
-		}//TODO Disable
+		}
 	}
 }
 
@@ -59,7 +59,6 @@ void GPIO_PeriClockControl(GPIO_RegDef_t *pGPIOx, uint8_t EnorDi)
  * @return            -
  *
  * @Note              -
-
  */
 void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 {
@@ -89,6 +88,75 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 }
 
 /*********************************************************************
+ * @fn      		  - GPIO_DeInit
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+ */
+void GPIO_DeInit(GPIO_RegDef_t *pGPIOx)
+{
+	if(pGPIOx == GPIOA)
+	{
+		GPIOA_REG_RESET();
+	}else if(pGPIOx == GPIOB){
+		GPIOB_REG_RESET();
+	}else if(pGPIOx == GPIOC){
+		GPIOC_REG_RESET();
+	}
+}
+
+
+/*********************************************************************
+ * @fn      		  - GPIO_ReadFromInputPin
+ *
+ * @brief             -
+ *
+ * @param[in]         - GPIO port
+ * @param[in]         - Pin number
+ * @param[in]         -
+ *
+ * @return            - 0 or 1
+ *
+ * @Note              -
+ */
+
+uint8_t GPIO_ReadFromInputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber)
+{
+	uint8_t value;
+	value = (uint8_t)((pGPIOx->IDR >> PinNumber) & 0x00000001);
+	return value;
+}
+
+
+/*********************************************************************
+ * @fn      		  - GPIO_ReadFromInputPort
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+ */
+uint16_t GPIO_ReadFromInputPort(GPIO_RegDef_t *pGPIOx)
+{
+	uint16_t value;
+	value = (uint16_t)pGPIOx->IDR;
+
+	return value;
+}
+
+/*********************************************************************
  * @fn      		  -
  *
  * @brief             -
@@ -100,41 +168,53 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
  * @return            -
  *
  * @Note              -
-
  */
-void GPIO_DeInit(GPIO_RegDef_t *pGPIOx)
-{
-
-}
-
-
-/*
- * Data read and write
- */
-uint8_t GPIO_ReadFromInputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber)
-{
-	//TODO Read from pin
-	return 0;
-}
-
-uint16_t GPIO_ReadFromInputPort(GPIO_RegDef_t *pGPIOx)
-{
-	//TODO Read from port
-	return 0;
-}
-
 void GPIO_WriteToOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber, uint8_t Value)
 {
+	if(Value == GPIO_PIN_SET)
+	{
+		pGPIOx->ODR |= (1 << PinNumber);
+	}else
+	{
+		pGPIOx->ODR &= ~(1 << PinNumber);
+	}
 
 }
+
+/*********************************************************************
+ * @fn      		  -
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+ */
 void GPIO_WriteToOutputPort(GPIO_RegDef_t *pGPIOx, uint16_t Value)
 {
-
+	pGPIOx->ODR = Value;
 }
 
+/*********************************************************************
+ * @fn      		  -
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+ */
 void GPIO_ToggleOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber)
 {
-
+	pGPIOx->ODR ^= (1 << PinNumber);
 }
 
 /*
