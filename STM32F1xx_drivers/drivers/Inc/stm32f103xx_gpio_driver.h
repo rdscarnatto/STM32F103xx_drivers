@@ -17,7 +17,7 @@ typedef struct
 {
 	uint8_t GPIO_PinNumber;
 	uint8_t GPIO_PinMode;			/*!< possible values from @GPIO_PIN_MODES >*/
-	uint8_t GPIO_PinCfg;			/*!< possible values from @GPIO_PIN_CONFIG >*/
+	uint8_t GPIO_PinOPType;
 }GPIO_PinConfig_t;
 
 /*
@@ -30,6 +30,7 @@ typedef struct
 	GPIO_PinConfig_t GPIO_PinConfig;   /*!< This holds GPIO pin configuration settings >*/
 
 }GPIO_Handle_t;
+
 
 /*
  * @GPIO_PIN_NUMBERS
@@ -55,23 +56,30 @@ typedef struct
 /*
  * @GPIO_PIN_MODES
  * GPIO pin possible modes
- */
+*/
 #define GPIO_MODE_IN 			0
 #define GPIO_MODE_OUT_10MHZ 	1
 #define GPIO_MODE_OUT_2MHZ		2
 #define GPIO_MODE_OUT_50MHZ		3
+#define GPIO_MODE_IT_FT			4
+#define GPIO_MODE_IT_RT			5
+#define GPIO_MODE_IT_RFT		6
+
+
 /*
  * @GPIO_PIN_CONFIG
- * GPIO pin possible modes
- */
+ * GPIO pin possible input modes
+*/
 #define GPIO_CNF_IN_ANALOG 	0		/*Input mode Analog */
 #define GPIO_CNF_IN_F	 	1		/*Input mode Floating */
 #define GPIO_CNF_IN_PUPD 	2		/*Input mode with pull-up pull-down */
 
+// Possible output types
 #define GPIO_CNF_OUT_PP 	0		/*Output Push-pull  */
 #define GPIO_CNF_OUT_OD 	1		/*Output Open drain */
 #define GPIO_CNF_AF_PP	 	2		/*Alternated Function output push-pull */
 #define GPIO_CNF_AF_OD		3		/*Alternated Function output Open Drain */
+
 
 
 #define ENABLE		1

@@ -12,6 +12,35 @@
 #define __vo volatile
 #define __weak __attribute__((weak))
 
+/**********************************START:Processor Specific Details **********************************/
+/*
+ * ARM Cortex Mx Processor NVIC ISERx register Addresses
+ */
+
+#define NVIC_ISER0          ( (__vo uint32_t*)0xE000E100 )
+#define NVIC_ISER1          ( (__vo uint32_t*)0xE000E104 )
+#define NVIC_ISER2          ( (__vo uint32_t*)0xE000E108 )
+#define NVIC_ISER3          ( (__vo uint32_t*)0xE000E10c )
+
+
+/*
+ * ARM Cortex Mx Processor NVIC ICERx register Addresses
+ */
+#define NVIC_ICER0 			((__vo uint32_t*)0XE000E180)
+#define NVIC_ICER1			((__vo uint32_t*)0XE000E184)
+#define NVIC_ICER2  		((__vo uint32_t*)0XE000E188)
+#define NVIC_ICER3			((__vo uint32_t*)0XE000E18C)
+
+
+/*
+ * ARM Cortex Mx Processor Priority Register Address Calculation
+ */
+#define NVIC_PR_BASE_ADDR 	((__vo uint32_t*)0xE000E400)
+
+/*
+ * ARM Cortex Mx Processor number of priority bits implemented in Priority Register
+ */
+#define NO_PR_BITS_IMPLEMENTED  4
 /*
 * Base address of FALSH and SRAM memories
 */
@@ -109,15 +138,18 @@
 
 typedef struct
 {
-	__vo uint32_t CRL;           /*!< GPIO port configuration register low,         	Address offset: 0x00      */
+	__vo uint32_t CRL;           /*!< GPIO port configuration register low,         Address offset: 0x00      */
 	__vo uint32_t CRH;           /*!< GPIO port configuration register high,     	Address offset: 0x04      */
 	__vo uint32_t IDR;			 /*!< GPIO port input data register,     			Address offset: 0x08      */
 	__vo uint32_t ODR;			 /*!< GPIO port output data register,     			Address offset: 0x0C      */
-	__vo uint32_t BSRR;			 /*!< GPIO Port bit set/reset register,     			Address offset: 0x10      */
-	__vo uint32_t BRR;			 /*!< GPIO Port bit reset register,     				Address offset: 0x14      */
+	__vo uint32_t BSRR;			 /*!< GPIO Port bit set/reset register,     		Address offset: 0x10      */
+	__vo uint32_t BRR;			 /*!< GPIO Port bit reset register,     			Address offset: 0x14      */
 	__vo uint32_t LCKR;			 /*!< GPIO Port configuration lock register,     	Address offset: 0x18      */
 }GPIO_RegDef_t;
 
+/*
+ * RCC registers definitions
+*/
 typedef struct
 {
 	__vo uint32_t CR;
@@ -132,6 +164,32 @@ typedef struct
 	__vo uint32_t CSR;
 }RCC_RegDef_t;
 
+/*
+ * EXTI registers definition
+*/
+typedef struct
+{
+	__vo uint32_t IMR;
+	__vo uint32_t EMR;
+	__vo uint32_t RTSR;
+	__vo uint32_t FTSR;
+	__vo uint32_t SWIER;
+	__vo uint32_t PR;
+}EXTI_RegDef_t;
+
+/*
+ * AFIO registers definition
+*/
+typedef struct
+{
+	__vo uint32_t EVCR;				/*!< AFIO Event control register						Address offset: 0x00 */
+	__vo uint32_t MAPR;				/*!< AFIO Remap and debug I/O configuration register	Address offset: 0x04 */
+	__vo uint32_t EXTICR[4];
+	uint32_t RESERVED0;
+	__vo uint32_t MAPR2;
+}AFIO_RegDef_t;
+
+
 
 /*
 * peripheral definitions (Peripheral base address typecast to xxx_RegDef_t
@@ -142,6 +200,8 @@ typedef struct
 #define GPIOC		((GPIO_RegDef_t*)GPIOC_BASEADDR)
 
 #define RCC 		((RCC_RegDef_t*)RCC_BASEADDR)
+#define EXTI		((EXTI_RegDef_t*)EXTI_BASEADDR)
+#define AFIO		((AFIO_RegDef_t*)AFIO_BASEADDR)
 
 /*
 * Clock Enable Macros for GPIOx peripherals
@@ -214,6 +274,42 @@ typedef struct
 #define GPIOA_REG_RESET()		do{(RCC->APB2RSTR |= (1 << 2)); (RCC->APB2RSTR &= ~(1 << 2));}while(0)
 #define GPIOB_REG_RESET()		do{(RCC->APB2RSTR |= (1 << 3)); (RCC->APB2RSTR &= ~(1 << 3));}while(0)
 #define GPIOC_REG_RESET()		do{(RCC->APB2RSTR |= (1 << 4)); (RCC->APB2RSTR &= ~(1 << 4));}while(0)
+
+
+
+/*
+ * This macro returns a code( between 0 to 7) for a given GPIO base address(x)
+ */
+#define GPIO_BASEADDR_TO_CODE(x)      ( (x == GPIOA)?0:\
+										(x == GPIOB)?1:\
+										(x == GPIOC)?2:0)
+
+/*
+ * IRQ(Interrupt Request) Numbers of STM32F407x MCU
+ * NOTE: update these macros with valid values according to your MCU
+ * TODO: You may complete this list for other peripherals
+ */
+
+#define IRQ_NO_EXTI0 		6
+#define IRQ_NO_EXTI1 		7
+#define IRQ_NO_EXTI2 		8
+#define IRQ_NO_EXTI3 		9
+#define IRQ_NO_EXTI4 		10
+#define IRQ_NO_EXTI9_5 		23
+#define IRQ_NO_EXTI15_10 	40
+#define IRQ_NO_SPI1			35
+#define IRQ_NO_SPI2         36
+#define IRQ_NO_SPI3         51
+#define IRQ_NO_SPI4
+#define IRQ_NO_I2C1_EV     31
+#define IRQ_NO_I2C1_ER     32
+#define IRQ_NO_USART1	    37
+#define IRQ_NO_USART2	    38
+#define IRQ_NO_USART3	    39
+#define IRQ_NO_UART4	    52
+#define IRQ_NO_UART5	    53
+#define IRQ_NO_USART6	    71
+
 
 
 #include "stm32f103xx_gpio_driver.h"
