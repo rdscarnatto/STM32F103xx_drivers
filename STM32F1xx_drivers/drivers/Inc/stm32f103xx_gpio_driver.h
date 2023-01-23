@@ -82,14 +82,6 @@ typedef struct
 
 
 
-#define ENABLE		1
-#define DISABLE		2
-#define SET			ENABLE
-#define RESET		DISABLE
-#define GPIO_PIN_SET	SET
-#define GPIO_PIN_RESET	RESET
-
-
 
 /******************************************************************************************
  *								APIs supported by this driver
