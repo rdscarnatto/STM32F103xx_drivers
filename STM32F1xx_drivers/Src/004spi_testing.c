@@ -2,7 +2,7 @@
  * 004spi_testing.c
  *
  *  Created on: 23 ene. 2023
- *      Author: ARRSC
+ *      Author: R. Scarnatto
  */
 #include "stm32f103xx.h"
 #include <string.h>
